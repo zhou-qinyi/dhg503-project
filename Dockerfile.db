@@ -1,0 +1,9 @@
+FROM postgres:latest
+
+# Set up default credentials and database name
+ENV POSTGRES_USER=dhg503
+ENV POSTGRES_PASSWORD=dhg503dhg503
+ENV POSTGRES_DB=dhg503
+
+# Copy the initialization script into the expected directory
+COPY init.sql /docker-entrypoint-initdb.d/

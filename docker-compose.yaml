@@ -1,0 +1,18 @@
+services:
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.db
+    image: dhg503_db_image
+    container_name: dhg503_db_container
+    ports:
+      - "54503:5432"
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: dhg503
+      POSTGRES_PASSWORD: dhg503dhg503
+      POSTGRES_DB: dhg503
+
+volumes:
+  pg_data:
