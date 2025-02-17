@@ -1,9 +1,16 @@
 FROM postgres:latest
 
-# Set up default credentials and database name
 ENV POSTGRES_USER=dhg503
 ENV POSTGRES_PASSWORD=dhg503dhg503
 ENV POSTGRES_DB=dhg503
 
-# Copy the initialization script into the expected directory
-COPY init.sql /docker-entrypoint-initdb.d/
+# Copy initialization files in correct order
+COPY init.sql /docker-entrypoint-initdb.d/init.sql
+COPY check-customers.sh /usr/local/bin/
+COPY tutorial.sql /scripts/
+
+# Only chmod the check-customers.sh script
+RUN chmod +x /usr/local/bin/check-customers.sh
+
+ENTRYPOINT ["check-customers.sh"]
+CMD ["postgres"]
