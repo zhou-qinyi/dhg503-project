@@ -9,8 +9,11 @@ COPY init.sql /docker-entrypoint-initdb.d/init.sql
 COPY check-customers.sh /usr/local/bin/
 COPY tutorial.sql /scripts/
 
-# Only chmod the check-customers.sh script
-RUN chmod +x /usr/local/bin/check-customers.sh
+# Set permissions for all relevant directories and files
+RUN chmod +x /usr/local/bin/check-customers.sh && \
+    chmod 755 /docker-entrypoint-initdb.d/init.sql && \
+    chmod 755 /scripts/tutorial.sql && \
+    chmod 755 /scripts
 
 ENTRYPOINT ["check-customers.sh"]
 CMD ["postgres"]
