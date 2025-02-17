@@ -4,14 +4,23 @@ set -e
 echo "Starting customer table check..."
 echo "Current database time: $(date -u +'%Y-%m-%d %H:%M:%S') UTC"
 
+# Start PostgreSQL in the background
 docker-entrypoint.sh postgres &
 
-until pg_isready -U dhg503 -d dhg503; do
+# Wait for PostgreSQL to be ready
+until pg_isready -U dhg503; do
     echo "Waiting for PostgreSQL to start..."
     sleep 1
 done
 
-echo "PostgreSQL is ready!"
+# Wait for database to be created
+echo "Checking database existence..."
+until psql -U dhg503 -d dhg503 -c "SELECT 1" &>/dev/null; do
+    echo "Waiting for database creation..."
+    sleep 1
+done
+
+echo "PostgreSQL is ready with database!"
 
 exists=$(psql -U dhg503 -d dhg503 -t -c "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'customers');")
 

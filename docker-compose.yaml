@@ -1,9 +1,10 @@
 services:
   db:
+    image: postgres:latest
     build:
       context: .
       dockerfile: Dockerfile.db
-    image: dhg503_db_image
+
     container_name: dhg503_db_container
     ports:
       - "54503:5432"
