@@ -103,3 +103,8 @@ fabric.properties
 
 # pg_data
 pg_data/
+
+# notebook data
+notebook/data/html/
+notebook/data/json/
+notebook/crawl.pyenv

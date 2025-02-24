@@ -14,6 +14,15 @@ services:
       POSTGRES_USER: dhg503
       POSTGRES_PASSWORD: dhg503dhg503
       POSTGRES_DB: dhg503
+    healthcheck:
+      test: >
+        CMD-SHELL
+        pg_isready -U dhg503 -d dhg503 -h localhost -p 5432 &&
+        psql -U dhg503 -d dhg503 -c 'SELECT 1; SELECT pg_sleep(0.5); SELECT 1;'
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
 volumes:
   pg_data:
