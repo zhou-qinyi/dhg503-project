@@ -7,3 +7,7 @@
 ## 17/02/2025
 
 - Practice SQL basic queries
+
+## 23/02/2025
+
+- Web Crawling
