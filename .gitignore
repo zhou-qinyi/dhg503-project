@@ -1,6 +1,7 @@
 # Docker project generated files to ignore
 #  if you want to ignore files created by your editor/tools,
 #  please consider a global .gitignore https://help.github.com/articles/ignoring-files
+.venv
 .vagrant*
 bin
 docker/docker
@@ -108,3 +109,4 @@ pg_data/
 notebook/data/html/
 notebook/data/json/
 notebook/crawl.pyenv
+__pycache__/

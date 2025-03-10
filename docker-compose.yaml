@@ -9,7 +9,7 @@ services:
     ports:
       - "54503:5432"
     volumes:
-      - ./pg_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: dhg503
       POSTGRES_PASSWORD: dhg503dhg503
@@ -25,4 +25,4 @@ services:
       start_period: 10s
 
 volumes:
-  pg_data:
+  postgres_data:

@@ -1,0 +1,32 @@
+crawler:
+  url_extractor:
+    sources:
+      scmp_urls:
+        output_dir: "data/raw/scmp/urls"
+        base_url: "https://www.scmp.com/"
+        targets:
+          - xpath: "//a[contains(., 'China')]"
+            url: "https://www.scmp.com/"
+
+  image_extractor:
+    sources:
+      scmp_images:
+        output_dir: "data/raw/scmp/images"
+        base_url: "https://www.scmp.com/"
+        targets:
+          - xpath: "//div[contains(@class, 'article-img')]//img"
+            url: "https://www.scmp.com/news/china"
+            save_images: true
+          - xpath: "//figure//img"
+            url: "https://www.scmp.com/news/asia"
+            save_images: true
+
+  text_extractor:
+    sources:
+      scmp_headlines:
+        output_dir: "data/raw/scmp/text"
+        base_url: "https://www.scmp.com/"
+        output_filename: "headlines.json"
+        targets:
+          - xpath: "//div[@data-qa='Component-Headline']//h2"
+            url: "https://www.scmp.com/news/china"

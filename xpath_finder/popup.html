@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>XPath Finder</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            width: 340px;
+            padding: 16px;
+            font-size: 14px;
+            color: #333;
+            margin: 0;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 18px;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .option-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #2196F3;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(20px);
+        }
+
+        .settings-section {
+            margin-bottom: 20px;
+        }
+
+        .settings-section h2 {
+            font-size: 15px;
+            margin: 0 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+
+        button {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background-color: #e8e8e8;
+            border-color: #ccc;
+        }
+
+        .btn-primary {
+            background-color: #4285f4;
+            color: white;
+            border-color: #3367d6;
+        }
+
+        .btn-primary:hover {
+            background-color: #3367d6;
+            border-color: #2a56c6;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .recent-xpaths {
+            margin-top: 15px;
+        }
+
+        .recent-xpath-item {
+            padding: 8px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .recent-xpath-item:hover {
+            background-color: #e8e8e8;
+        }
+
+        .recent-xpath-actions {
+            display: none;
+            position: absolute;
+            right: 5px;
+            top: 5px;
+        }
+
+        .recent-xpath-item:hover .recent-xpath-actions {
+            display: flex;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 12px;
+        }
+
+        .action-btn:hover {
+            background: white;
+            border-color: #ccc;
+        }
+
+        #xpath-input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            box-sizing: border-box;
+        }
+
+        #xpath-input:focus {
+            border-color: #4285f4;
+            outline: none;
+        }
+
+        #test-result {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 13px;
+            display: none;
+        }
+
+        .success {
+            background-color: #e8f5e9;
+            color: #1b5e20;
+            border: 1px solid #c8e6c9;
+        }
+
+        .error {
+            background-color: #ffebee;
+            color: #b71c1c;
+            border: 1px solid #ffcdd2;
+        }
+
+        .notification {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #4285f4;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            transform: translateY(-100%);
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>XPath Finder</h1>
+
+    <div class="settings-section">
+        <h2>Settings</h2>
+        <div class="option-group">
+            <label>
+                <span class="switch">
+                    <input type="checkbox" id="toggle-active" checked>
+                    <span class="slider"></span>
+                </span>
+                Enable XPath Finder
+            </label>
+        </div>
+        <div class="option-group">
+            <label>
+                <span class="switch">
+                    <input type="checkbox" id="toggle-strict-mode" checked>
+                    <span class="slider"></span>
+                </span>
+                Strict Mode (Include Indexes)
+            </label>
+        </div>
+    </div>
+
+    <div class="settings-section">
+        <h2>Manual XPath Testing</h2>
+        <input type="text" id="xpath-input" placeholder="Enter XPath to test...">
+        <div class="btn-group">
+            <button id="test-btn" class="btn-primary">Test XPath</button>
+            <button id="copy-test-btn">Copy</button>
+        </div>
+        <div id="test-result"></div>
+    </div>
+
+    <div class="settings-section">
+        <h2>Recent XPaths</h2>
+        <div id="recent-xpaths-list" class="recent-xpaths"></div>
+        <div class="btn-group" style="margin-top: 10px;">
+            <button id="clear-recent">Clear History</button>
+        </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>

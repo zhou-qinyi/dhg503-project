@@ -1,0 +1,180 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "crawler": {
+      "type": "object",
+      "anyOf": [
+        { "required": ["url_extractor"] },
+        { "required": ["element_extractor"] },
+        { "required": ["image_extractor"] },
+        { "required": ["text_extractor"] },
+        { "required": ["html_crawler"] }
+      ],
+      "properties": {
+        "url_extractor": { "$ref": "#/definitions/extractor" },
+        "element_extractor": { "$ref": "#/definitions/extractor" },
+        "image_extractor": { "$ref": "#/definitions/image_extractor" },
+        "text_extractor": { "$ref": "#/definitions/text_extractor" },
+        "html_crawler": { "$ref": "#/definitions/html_crawler" }
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/extractor"
+      }
+    }
+  },
+  "required": ["crawler"],
+  "additionalProperties": false,
+  "definitions": {
+    "extractor": {
+      "type": "object",
+      "properties": {
+        "sources": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "$ref": "#/definitions/source"
+          }
+        }
+      },
+      "required": ["sources"],
+      "additionalProperties": false
+    },
+    "image_extractor": {
+      "type": "object",
+      "properties": {
+        "sources": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "output_dir": { "type": "string" },
+              "base_url": { "type": "string" },
+              "targets": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "xpath": { "type": "string" },
+                    "url": { "type": "string" },
+                    "save_images": { "type": "boolean" },
+                    "params": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": ["xpath"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": ["output_dir", "base_url", "targets"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["sources"],
+      "additionalProperties": false
+    },
+    "text_extractor": {
+      "type": "object",
+      "properties": {
+        "sources": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "output_dir": { "type": "string" },
+              "base_url": { "type": "string" },
+              "output_filename": { "type": "string" },
+              "targets": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "xpath": { "type": "string" },
+                    "url": { "type": "string" },
+                    "params": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": ["xpath"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": ["output_dir", "base_url", "targets"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["sources"],
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "output_dir": { "type": "string" },
+        "base_url": { "type": "string" },
+        "targets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/target"
+          }
+        }
+      },
+      "required": ["output_dir", "base_url", "targets"],
+      "additionalProperties": false
+    },
+    "target": {
+      "type": "object",
+      "properties": {
+        "xpath": { "type": "string" },
+        "url": { "type": "string" },
+        "params": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "required": ["xpath", "url"],
+      "additionalProperties": false
+    },
+    "html_crawler": {
+      "type": "object",
+      "properties": {
+        "sources": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "base_url": { "type": "string" },
+              "output_dir": { "type": "string" },
+              "targets": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "input_file": { "type": "string" },
+                    "xpath": { "type": "string" },
+                    "file_key": { "type": "string" },
+                    "resumable": { "type": "boolean" }
+                  },
+                  "required": ["input_file", "xpath", "file_key", "resumable"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": ["base_url", "output_dir", "targets"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["sources"],
+      "additionalProperties": false
+    }
+  }
+}
